@@ -53,9 +53,8 @@ void benchmarkDocument(const char* fname){
 	cout<<"decode_SCDC time: "<<(float)mdc.sums<<" scdc_L="<<scdc_L<<endl;
 	cout<<" decode_I_fast time: "<<(float)mdc.sumi<<"\n";
     cout<<" compression ratio: "<< ((float)filesize(fname))/mdc.cur_byte<<endl;
-	//i235_test(Nwords,fname);
+	//mdc.i235_test(mdc.Nwords,fname);
 	cout<<"\n uu="<<uu*2<<u<<"\n";
-	//getch();//remove
 }
 int main() {
     cout<<"hello";
