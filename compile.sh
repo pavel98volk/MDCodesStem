@@ -1,0 +1,1 @@
+g++ main.cpp codes.cpp stemmer.cpp codes.h stemmer.h; rm ./*.gch;

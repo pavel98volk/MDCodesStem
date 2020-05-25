@@ -1,0 +1,13 @@
+# ignore all precompiled headers
+*.gch
+#ignore output files
+*.out
+#ignore datasets and literature
+
+datasets/*.txt
+literature
+
+#ignore old
+old
+
+.vscode
