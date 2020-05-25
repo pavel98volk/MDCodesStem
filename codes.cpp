@@ -203,7 +203,7 @@ int k(0),p;
 			cur_byte++;
 	}
 	if(cur_byte>162954)
-		cur_byte=cur_byte;
+		cur_byte=cur_byte;//?
 }
 
 void MultiDelimiterCodes::flush_to_byte_i235(unsigned int x) {
@@ -1169,7 +1169,7 @@ void MultiDelimiterCodes::text_to_ranks(map<string,int> dic_map,const char* file
 
 	//cout<<"rank["<<rank_after0<<"]="<<_0ranks[rank_after0]<<"\n ";
 	//fout.close();
-	cout<<"Text to ranks done";
+	cout<<"Text to ranks done"<<endl;
 	Nwords=i;
 }
 
@@ -1659,13 +1659,14 @@ int MultiDelimiterCodes::word_frequences(const char* s) {
     }
 	while ( ! file.eof() ) {
 		file>>word;
-		word_part = UkStemmer::stem(word);
+		word_part =UkStemmer::stem(word);
 		addWord(i235_map,word_part);
 		size++;
+		/*
 		if(word_part.length() != word.length()){
 			addWord(i235_map,"."+word.substr(word_part.length()));
 			size++;	
-		}
+		}*/
 	}
 
 	int i=0;

@@ -5,6 +5,7 @@
 #ignore datasets and literature
 
 datasets/*.txt
+!datasets/*processed.txt
 literature
 
 #ignore old

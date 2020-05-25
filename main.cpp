@@ -9,8 +9,6 @@ ifstream::pos_type filesize(const char* filename)
     return in.tellg(); 
 }
 void benchmarkDocument(const char* fname){
-    cout <<"hello";
-
 	MultiDelimiterCodes& mdc = *new MultiDelimiterCodes();
 	int scdc_L=0;
 	mdc.ilen=1000;
@@ -39,6 +37,7 @@ void benchmarkDocument(const char* fname){
 	mdc.create_tables();
 	scdc_L=mdc.rpbc_encode(mdc.Nwords,mdc.ranks,mdc.codes_scdc);
 	cout<<"S="<<mdc.S<<" scdc_L= "<<scdc_L<<" SCDC av codeword length: "<<(float)scdc_L*8/mdc.Nwords<<"\n";
+    
 	for(int iter=0;iter<10;iter++) {
 		u+=mdc.decode_i235_fast();
 		//sumi+=(float)(tend.QuadPart - tstart.QuadPart)/tfreq.QuadPart;
@@ -57,7 +56,6 @@ void benchmarkDocument(const char* fname){
 	cout<<"\n uu="<<uu*2<<u<<"\n";
 }
 int main() {
-    cout<<"hello";
     benchmarkDocument("./datasets/hp1_processed.txt");
     benchmarkDocument("./datasets/bible_processed.txt");
 }
