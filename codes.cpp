@@ -1662,11 +1662,11 @@ int MultiDelimiterCodes::word_frequences(const char* s) {
 		word_part =UkStemmer::stem(word);
 		addWord(i235_map,word_part);
 		size++;
-		/*
+		
 		if(word_part.length() != word.length()){
 			addWord(i235_map,"."+word.substr(word_part.length()));
 			size++;	
-		}*/
+		}
 	}
 
 	int i=0;
