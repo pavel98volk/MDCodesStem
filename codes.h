@@ -78,10 +78,12 @@ class MultiDelimiterCodes{
     //=======================================
 
     //LARGE_INTEGER tstart, tend, tfreq;
+
     static const int N=610000,L=30000000,globL=3600000;
     uint rank_after0=0,ranks[L],ranks_scdc[L],_0ranks[N],S=145,C=256-S,base[100],sumd,sum1;
     //i235 and rand_test changed to heap allocation (below)
     uint *i235 = new uint[300000],*rand_test= new uint[1000000];
+    //output data, codes for i235
     unsigned char codes[L*4],codes_d235[L*4],codes_scdc[L*4];
     uint decoded[1],decoded_fib[1],decoded_scdc[1],rz_esi,rz_esp,decoded_c[1];
 
@@ -114,11 +116,27 @@ class MultiDelimiterCodes{
     uint TAB[10*256];
     FibT Ftab[255][3];
     uint Fib3[150][28],Start[32];
+    
+    //--------------- stemming related ---------------
+    std::vector<std::string>used_suffixes;
+    // --------------------constuctor-------------
+    ~MultiDelimiterCodes(){
+      delete[] T235;
+      delete[] T235_1;
+      delete[] suffix;
+      delete[] first;
+      delete[] i235;
+      delete[] rand_test;
+      delete[] out235;
+      delete[] out_i235;
+      delete[] Dict_i235;
+      delete[] outSCDC;
+      delete[] out_i235s;
+    }
+    //----------------------
 
     uint decode_d235_base();
-    //--------------- stemming related ---------------
-    map<string,int> i235_map_endings,i235_map_stems;
-    // --------------------
+
     void decodeFib();
 
     int get_size(unsigned int x);
@@ -196,7 +214,7 @@ class MultiDelimiterCodes{
     um dictionary;
 
     // here struct entry was defined
-
+    
     int getIndex(int n, int l);
 
     int f2(int n,int l);
@@ -233,7 +251,8 @@ class MultiDelimiterCodes{
 
     void dict_from_file_scdc();
 
-    void text_to_ranks(map<string,int> dic_map,const char* file_name,unsigned int* ranks);
+    //if limit_suffixes is true, only the suffixes in `used_suffixes` are separated, others are kept with the stem.  use_suffixes=false means suffixes will not be stored.
+    void text_to_ranks(map<string,int> dic_map,const char* file_name,unsigned int* ranks, const bool use_suffixes = true,const bool limit_suffixes = false);
 
     bool d235_in_i235(uint x) ;
 
@@ -287,8 +306,9 @@ class MultiDelimiterCodes{
 
     void gen_reverse() ;
 
+    //if limit_suffixes is true, only the suffixes in `used_suffixes` are separated, others are kept with the stem.  use_suffixes=false means suffixes will not be stored.
     //NOTE: here the library is created. Taking a word from document and checking against hash map
-    int word_frequences(const char* s);
+    int word_frequences(const char* s, const bool use_suffixes = true,const bool limit_suffixes = false);
 
     void write_to_file_i235(int N,string** indices,char* fname);
 

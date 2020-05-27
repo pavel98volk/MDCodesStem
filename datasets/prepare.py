@@ -1,6 +1,6 @@
 import string;
 import re;
-file_name = "hp1"
+file_name = "voly"
 with open("./"+file_name+".txt", "r") as inp:
     with open("./"+file_name+"_processed.txt", "w") as out:
         n = 0

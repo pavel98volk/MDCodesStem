@@ -12,6 +12,7 @@
 #include <math.h>
 #include <fstream>
 #include <sys/timeb.h>
+#include <algorithm>
 //#include <windows.h>
 #include <functional>
 
@@ -20,8 +21,6 @@ using namespace std;
 #pragma optimize( "", off )
 
 #include "codes.h"
-
-
 
 
 uint MultiDelimiterCodes::decode_d235_base() {
@@ -232,12 +231,6 @@ uint res=0;
 	return(res);
 }
 
-uint inverted_d235[150000];
-
-void MultiDelimiterCodes::make_inverted_d235() {
-
-}
-
 void MultiDelimiterCodes::encodeC235(int max_rank,uint* ranks) {
 int i;
 	cur_byte=0; cur_bit=7;
@@ -245,7 +238,7 @@ int i;
 		flush_to_byte(get_code(ranks[i]));
 	clen=cur_byte;
 }
-
+// max_rank equals to word amount in text, 
 void MultiDelimiterCodes::encodeI235(int max_rank,uint* ranks) {
 int i;
 	cur_byte=0; cur_bit=7;
@@ -733,10 +726,7 @@ const int block_size = 8;
 const int M = 148;
 const int wcount = 5*1e6;
 const int numShifts = 20;
-int cur_dec;
 
-vector<int> fib3, start;
-um dictionary;
 
 // here struct entry was defined
 
@@ -1141,9 +1131,10 @@ void MultiDelimiterCodes::dict_from_file_scdc() {
 	dic_size_scdc=i;
 }
 
-void MultiDelimiterCodes::text_to_ranks(map<string,int> dic_map,const char* file_name,unsigned int* ranks){
+void MultiDelimiterCodes::text_to_ranks(map<string,int> dic_map,const char* file_name,unsigned int* ranks,const bool use_suffixes,const bool limit_suffixes){
 	int i=0,j=0;
 	string word;
+	string part;
 	char x;
 
 	for(int i=0;i<diff_words;i++)
@@ -1152,15 +1143,35 @@ void MultiDelimiterCodes::text_to_ranks(map<string,int> dic_map,const char* file
 	//ofstream fout("result.txt");
 	while ( ! file.eof() ) {
 			file>>word;
-			if(dic_map.find(word)!=dic_map.end()) {
-				ranks[i++]=dic_map[word];
+				part = UkStemmer::stem(word);
+
+			if(limit_suffixes){
+				std::vector<string>::iterator it = find(used_suffixes.begin(), used_suffixes.end(), word.substr(part.length()));
+				if (it == used_suffixes.end()) part = word;
+			}
+			if(dic_map.find(part)!=dic_map.end()) {
+				ranks[i++]=dic_map[part];
 			}else
 				i=i;
 			if(i>=2 && ranks[i-2]==0) {
 				_0ranks[ranks[i-1]]++;
 			}
-			if(i%100000==0)
-				cout<<i<<" ";
+			/*if(i%100000==0)
+				cout<<i<<" ";*/ 
+			
+			if((use_suffixes)&& (part.length() != word.length())){
+				part = "."+word.substr(part.length());
+				if(dic_map.find(part)!=dic_map.end()) {
+					ranks[i++]=dic_map[part];
+				}else
+					i=i;
+				if(i>=2 && ranks[i-2]==0) {
+					_0ranks[ranks[i-1]]++;
+				}
+				/*if(i%100000==0)
+					cout<<i<<" ";*/ //commented not to flood the output
+			}
+			
     }
 	
 	/*for(int i=0;i<diff_words;i++)
@@ -1169,7 +1180,6 @@ void MultiDelimiterCodes::text_to_ranks(map<string,int> dic_map,const char* file
 
 	//cout<<"rank["<<rank_after0<<"]="<<_0ranks[rank_after0]<<"\n ";
 	//fout.close();
-	cout<<"Text to ranks done"<<endl;
 	Nwords=i;
 }
 
@@ -1452,7 +1462,7 @@ int MultiDelimiterCodes::decode_i235_fast_orig() {
 				if(t.p4>=0) {
 					//r4++;
 					out_i235[k++]=Dict_i235+t.p3;
-					//out_i235s[k++]=*(Dict_i235+t.p3);
+					/*out_i235s[k++]=*(Dict_i235+t.p3);*/
 					p=t.p4;
 				} else
 					p=t.p3;
@@ -1648,7 +1658,7 @@ inline void addWord(std::map<std::string, int>& i235_map, const std::string& wor
 }
 
 
-int MultiDelimiterCodes::word_frequences(const char* s) {
+int MultiDelimiterCodes::word_frequences(const char* s, const bool use_suffixes, const bool limit_suffixes) {
 	double pi;
 	string word;
 	string word_part;
@@ -1659,11 +1669,16 @@ int MultiDelimiterCodes::word_frequences(const char* s) {
     }
 	while ( ! file.eof() ) {
 		file>>word;
-		word_part =UkStemmer::stem(word);
+		word_part = UkStemmer::stem(word);
+		if(limit_suffixes){
+			std::vector<string>::iterator it = find(used_suffixes.begin(), used_suffixes.end(), word.substr(word_part.length()));
+			if (it == used_suffixes.end()) word_part = word;
+		}
+
 		addWord(i235_map,word_part);
 		size++;
 		
-		if(word_part.length() != word.length()){
+		if((use_suffixes) &&(word_part.length() != word.length())){
 			addWord(i235_map,"."+word.substr(word_part.length()));
 			size++;	
 		}
