@@ -18,7 +18,7 @@ const std::string UkStemmer::vowel[] = {"а","е","и","о","у","ю","я","і",
 // not used (for now)
 const std::string UkStemmer::consonant[] = {"б","в","г","ґ","д","ж","з","й","к","л","м","н","п","р","с","т","ф","х","ц","ч","ш","щ"};
 //https://webpen.com.ua/pages/Pravopys_Pryholosnyh/6_extension_doubling_consonants.html
-const std::string UkStemmer::doubledConsonant[] = {"б","в","г","ґ","д","ж","з","к","л","м","н","п","р","с","т","ф","х","ц","ч","ш","щ"};//length 10+1;
+const std::string UkStemmer::doubledConsonant[] = {"б","в","г","ґ","д","ж","з","к","л","м","н","п","р","с","т","ф","х","ц","ч","ш","щ"}; //todo remove unused
 // дієприслівник
 const std::string UkStemmer::dieprislivnik[] = {"учи", "ючи","ачи","ячи"};
 const std::string UkStemmer::perfectivegerund[]={"ив","ивши","ившись"}; //  http://litopys.org.ua/ukrmova/um207.htm //diepricmetnikoviy zvorot

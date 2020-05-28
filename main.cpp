@@ -47,8 +47,7 @@ void setMostUsedSuffixesUnique(const char* fname, vector<string>&result_vector, 
 	}
 	delete &mdc2;
 }
-void benchmarkDocument(const char* fname,int value){
-	cout<<"["<<value<<", ";
+void benchmarkDocument(const char* fname,int minimum_suffix_occurances){
 	MultiDelimiterCodes& mdc = *new MultiDelimiterCodes();
 	int scdc_L=0;
 	mdc.ilen=1000;
@@ -64,7 +63,7 @@ void benchmarkDocument(const char* fname,int value){
 		}
 	}
 */
-	//setMostUsedSuffixesUnique(fname,mdc.used_suffixes, 8000);
+	setMostUsedSuffixesUnique(fname,mdc.used_suffixes, minimum_suffix_occurances);
 	
 	size=mdc.word_frequences(fname,true, true);// get the word frequences in the text
 
@@ -141,7 +140,7 @@ void benchmarkDocument(const char* fname,int value){
 }
 int main() {
     //benchmarkDocument("./datasets/hp1_processed.txt");
-	benchmarkDocument("./datasets/bible_processed.txt",i);
+	benchmarkDocument("./datasets/bible_processed.txt",0);
 	//benchmarkDocument("./datasets/voly_processed.txt",i);
 	//benchmarkDocument("./datasets/processed.txt");
 
